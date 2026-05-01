@@ -583,6 +583,23 @@ async function handleSubmit() {
       _replyto: email,
       _subject: `🎓 New Lead: ${name} — Score ${cur} → ${target} | Meza Scholars`
     })
+ }).catch(() => {});
+
+  // Send to Make webhook → Mailchimp
+  fetch('https://hook.us2.make.com/1nh6al14b2yammjk3olkwpmc961q0ro3', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: email,
+      parent_name: name,
+      current_score: cur,
+      target_score: target,
+      points_needed: gap,
+      weeks_until_test: weeks,
+      study_hours_per_week: hrs,
+      scholarship_value: scholarship,
+      language: lang === 'en' ? 'English' : 'Spanish'
+    })
   }).catch(() => {});
 
   // Get AI-personalized response
