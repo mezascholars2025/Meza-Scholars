@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAT Score Gap Calculator | Meza Scholars</title>
+
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1979333789636738');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1979333789636738&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f4fa;
+    color: #1E3260;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+  }
+
+  .top-lang-toggle {
+    display: flex;
+    background: rgba(63,96,161,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(63,96,161,0.15);
+    margin-bottom: 14px;
+  }
+
+  .top-lang-toggle .lang-btn {
+    padding: 7px 20px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    background: transparent;
+    color: rgba(30,50,96,0.4);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .top-lang-toggle .lang-btn.active { background: #3F60A1; color: #ffffff; }
+
+  .card {
+    background: #ffffff;
+    border: 1px solid #dce6f5;
+    border-radius: 18px;
+    width: 100%;
+    max-width: 580px;
+    box-shadow: 0 4px 32px rgba(30,50,96,0.09);
+    overflow: hidden;
+  }
+
+  .card-header {
+    background: #3F60A1;
+    padding: 24px 32px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .brand-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand-logo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    flex-shrink: 0;
+    background: #ffffff;
+    border-radius: 50%;
+    padding: 3px;
+  }
+
+  .brand-text { display: flex; flex-direction: column; gap: 2px; }
+  .brand-name { font-size: 15px; font-weight: 700; color: #E9A921; letter-spacing: 0.05em; text-transform: uppercase; }
+  .brand-tagline { font-size: 11px; color: rgba(255,255,255,0.55); letter-spacing: 0.03em; }
+
+  .coach-block { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .coach-photo {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 15%;
+    border: 2px solid #E9A921;
+    flex-shrink: 0;
+    background: #ffffff;
+  }
+  .coach-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .lang-toggle {
+    display: flex;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .lang-btn {
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .lang-btn.active { background: #E9A921; color: #1E3260; }
+
+  .card-body { padding: 28px 32px; }
+
+  .headline { font-size: 21px; font-weight: 700; color: #1E3260; line-height: 1.3; margin-bottom: 6px; }
+  .subline { font-size: 14px; color: #5B6B8A; margin-bottom: 24px; line-height: 1.6; }
+
+  /* DATE URGENCY BANNER */
+  .date-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    background: rgba(233,169,33,0.1);
+    border: 1px solid rgba(233,169,33,0.3);
+    border-radius: 8px;
+    padding: 9px 12px;
+    margin-bottom: 18px;
+    font-size: 12.5px;
+    color: #1E3260;
+    text-align: center;
+  }
+  .date-banner svg { color: #C68E15; flex-shrink: 0; }
+  .date-banner strong { color: #C68E15; }
+
+  /* TRUST STRIP (first-screen proof) */
+  .trust-strip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+    background: #f5f8ff;
+    border: 1.5px solid #dce6f5;
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 20px;
+  }
+  .trust-stars { color: #E9A921; font-size: 13px; letter-spacing: 2px; }
+  .trust-stats { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .trust-stat { font-size: 13px; font-weight: 700; color: #1E3260; }
+  .trust-dot { color: #b0bcd4; font-weight: 700; }
+  .trust-sub { font-size: 11px; color: #8a97b5; font-weight: 600; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+
+  label { font-size: 11px; font-weight: 700; color: #8a97b5; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  input, select {
+    background: #f5f8ff;
+    border: 1.5px solid #dce6f5;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 15px;
+    color: #1E3260;
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    font-family: inherit;
+  }
+
+  input::placeholder { color: #b0bcd4; }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: #E9A921;
+    box-shadow: 0 0 0 3px rgba(233,169,33,0.12);
+    background: #fff;
+  }
+
+  select { cursor: pointer; }
+
+  .divider { height: 1px; background: #eef2fa; margin: 20px 0; }
+
+  .capture-section { margin-bottom: 4px; }
+  .capture-label-row { display: flex; align-items: center; gap: 7px; margin-bottom: 10px; }
+  .lock-icon { width: 13px; height: 13px; color: #8a97b5; flex-shrink: 0; }
+  .capture-title { font-size: 13px; font-weight: 700; color: #1E3260; }
+  .privacy-note { font-size: 11px; color: #b0bcd4; margin-top: 6px; display: flex; align-items: center; gap: 5px; }
+
+  .calc-btn {
+    width: 100%;
+    padding: 14px;
+    background: #E9A921;
+    color: #1E3260;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 18px;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    letter-spacing: 0.02em;
+    font-family: inherit;
+    box-shadow: 0 2px 12px rgba(233,169,33,0.25);
+  }
+
+  .calc-btn:hover { background: #C68E15; box-shadow: 0 4px 18px rgba(233,169,33,0.35); }
+  .calc-btn:active { transform: scale(0.99); }
+  .calc-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+  /* LOADING STATE */
+  .loading-state {
+    display: none;
+    margin-top: 24px;
+    padding: 24px;
+    background: #f5f8ff;
+    border-radius: 12px;
+    border: 1.5px solid #dce6f5;
+    text-align: center;
+  }
+
+  .loading-state.visible { display: block; }
+
+  .loader {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #dce6f5;
+    border-top: 3px solid #E9A921;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 12px;
+  }
+
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  .loading-text { font-size: 14px; color: #1E3260; font-weight: 600; margin-bottom: 4px; }
+  .loading-sub { font-size: 12px; color: #8a97b5; }
+
+  /* RESULTS */
+  .results { display: none; }
+  .results.visible { display: block; }
+
+  .results-divider { height: 3px; background: linear-gradient(90deg, #3F60A1, #E9A921); margin: 24px 0 20px; border-radius: 99px; }
+  .results-header { font-size: 11px; font-weight: 700; color: #E9A921; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
+
+  .bar-section { margin-bottom: 20px; }
+  .bar-label-row { display: flex; justify-content: space-between; font-size: 12px; color: #8a97b5; margin-bottom: 8px; font-weight: 600; }
+  .bar-track { background: #eef2fa; border-radius: 99px; height: 10px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 99px; background: #3F60A1; transition: width 0.8s ease; }
+  .bar-target-marker { position: absolute; top: 0; height: 100%; background: #E9A921; opacity: 0.4; border-radius: 99px; }
+
+  /* SCHOLARSHIP HERO */
+  .scholarship-hero {
+    background: linear-gradient(135deg, #1E3260 0%, #3F60A1 100%);
+    border-radius: 14px;
+    padding: 22px 20px;
+    text-align: center;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 20px rgba(30,50,96,0.18);
+  }
+  .scholarship-hero-label { font-size: 11px; font-weight: 700; color: #E9A921; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+  .scholarship-hero-val { font-size: 44px; font-weight: 800; color: #ffffff; line-height: 1; margin-bottom: 8px; letter-spacing: -0.02em; }
+  .scholarship-hero-sub { font-size: 12.5px; color: rgba(255,255,255,0.75); line-height: 1.6; max-width: 380px; margin: 0 auto; }
+
+  .metrics-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 18px; }
+  .metrics-grid.metrics-3 { grid-template-columns: repeat(3, 1fr); }
+  .metric { background: #f5f8ff; border: 1.5px solid #dce6f5; border-radius: 10px; padding: 14px 12px; text-align: center; }
+  .metric-val { font-size: 24px; font-weight: 700; color: #1E3260; line-height: 1; margin-bottom: 4px; }
+  .metric-val.gold { color: #E9A921; }
+  .metric-lbl { font-size: 11px; color: #8a97b5; line-height: 1.4; }
+
+  /* AI RESPONSE BLOCK */
+  .ai-response {
+    background: linear-gradient(135deg, #f5f8ff 0%, #eef2fa 100%);
+    border: 1.5px solid #dce6f5;
+    border-left: 4px solid #E9A921;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #2d3a5e;
+  }
+
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    color: #E9A921;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+    padding: 4px 10px;
+    background: rgba(233,169,33,0.1);
+    border-radius: 99px;
+    border: 1px solid rgba(233,169,33,0.25);
+  }
+
+  .ai-response h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1E3260;
+    margin: 16px 0 8px;
+  }
+
+  .ai-response h3:first-of-type { margin-top: 0; }
+
+  .ai-response p { margin-bottom: 10px; }
+  .ai-response ul, .ai-response ol { margin: 8px 0 12px 20px; }
+  .ai-response li { margin-bottom: 6px; }
+  .ai-response strong { color: #1E3260; font-weight: 700; }
+
+  /* FULL-WIDTH PEAK CTA */
+  .cta-link-full {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    font-size: 15px;
+    margin: 4px 0 8px;
+    box-shadow: 0 2px 12px rgba(233,169,33,0.3);
+  }
+  .cta-microcopy { font-size: 12px; color: #8a97b5; text-align: center; margin-bottom: 22px; line-height: 1.5; }
+  .cta-microcopy.light { color: rgba(255,255,255,0.7); margin-bottom: 0; }
+  .price-anchor { font-size: 12.5px; font-weight: 700; color: #E9A921; text-align: center; margin: 12px 0 8px; }
+
+  /* PROOF */
+  .proof-section { margin-bottom: 20px; }
+  .proof-header { font-size: 11px; font-weight: 700; color: #E9A921; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; text-align: center; }
+  .proof-card {
+    background: #f5f8ff;
+    border: 1.5px solid #dce6f5;
+    border-left: 4px solid #E9A921;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .proof-stars { color: #E9A921; font-size: 13px; letter-spacing: 2px; margin-bottom: 8px; }
+  .proof-quote { font-size: 13.5px; line-height: 1.65; color: #2d3a5e; margin-bottom: 10px; font-style: italic; }
+  .proof-meta { display: flex; flex-direction: column; gap: 1px; }
+  .proof-name { font-size: 13px; font-weight: 700; color: #1E3260; }
+  .proof-detail { font-size: 11.5px; color: #8a97b5; font-weight: 600; }
+
+  .cta-box { background: #3F60A1; border-radius: 12px; padding: 22px; text-align: center; }
+
+  /* OFFER STACK */
+  .offer-title { font-size: 14px; font-weight: 700; color: #E9A921; margin-bottom: 14px; line-height: 1.5; text-align: left; }
+  .offer-stack { list-style: none; margin: 0 0 18px; padding: 0; text-align: left; }
+  .offer-stack li { font-size: 13.5px; color: rgba(255,255,255,0.9); line-height: 1.55; margin-bottom: 11px; display: flex; gap: 9px; align-items: flex-start; }
+  .offer-stack .check { color: #E9A921; font-weight: 800; flex-shrink: 0; font-size: 14px; }
+
+  .cta-link {
+    display: inline-block;
+    background: #E9A921;
+    color: #1E3260;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 13px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.2s;
+    font-family: inherit;
+  }
+
+  .cta-link:hover { background: #C68E15; }
+
+  .signature {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+  }
+
+  .signature strong { color: #E9A921; display: block; margin-bottom: 2px; font-size: 13px; }
+
+  @media (max-width: 480px) {
+    .card-body { padding: 22px 18px; }
+    .card-header { padding: 18px 18px 16px; }
+    .form-row { grid-template-columns: 1fr; }
+    .headline { font-size: 18px; }
+    .brand-logo { width: 42px; height: 42px; }
+    .scholarship-hero-val { font-size: 38px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-lang-toggle">
+  <button class="lang-btn" onclick="setLang('en')">EN</button>
+  <button class="lang-btn active" onclick="setLang('es')">ES</button>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <div class="brand-block">
+      <img src="logo.png" alt="Meza Scholars" class="brand-logo" onerror="this.style.display='none'">
+      <div class="brand-text">
+        <span class="brand-name">Meza Scholars</span>
+        <span class="brand-tagline">SAT Tutoring · South Florida</span>
+      </div>
+    </div>
+    <div class="coach-block">
+      <img src="sebastian.jpg" alt="Sebastian Meza" class="coach-photo" onerror="this.style.display='none'">
+      <span class="coach-label" id="t-coach-label">Tu coach</span>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <h1 class="headline" id="t-headline">Nadie te explicó cómo funciona Bright Futures. Hasta ahora.</h1>
+    <p class="subline" id="t-subline">En 60 segundos: cuánto dinero de beca está en juego para tu hijo/a.</p>
+
+    <div class="trust-strip">
+      <span class="trust-stars">★★★★★</span>
+      <div class="trust-stats">
+        <span class="trust-stat" id="t-trust-stat1">+160 pt average improvement</span>
+        <span class="trust-dot">·</span>
+        <span class="trust-stat" id="t-trust-stat2">100% reach Bright Futures</span>
+      </div>
+      <span class="trust-sub" id="t-trust-sub">Trusted by South Florida families · 7 five-star reviews</span>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label id="t-current">Current SAT Score</label>
+        <input type="number" id="current-score" min="400" max="1600" step="10" placeholder="e.g. 1150">
+      </div>
+      <div class="form-group">
+        <label id="t-target-label">Scholarship Target</label>
+        <select id="target-select">
+          <option value="1190">Florida Medallion (1190)</option>
+          <option value="1330">Florida Academic (1330)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-top:12px;">
+      <label id="t-email-label">Email Address</label>
+      <input type="email" id="parent-email" placeholder="your@email.com">
+    </div>
+
+    <div class="privacy-note" id="t-privacy">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>No spam. Your score breakdown + next steps.</span>
+    </div>
+
+    <button class="calc-btn" id="calc-btn" onclick="handleSubmit()">
+      <span id="btn-text">See Why They're Stuck →</span>
+    </button>
+
+    <!-- LOADING -->
+    <div class="loading-state" id="loading-state">
+      <div class="loader"></div>
+      <div class="loading-text" id="t-loading-text">Building your personalized plan...</div>
+      <div class="loading-sub" id="t-loading-sub">Sebastian's AI is analyzing your situation. Takes ~10 seconds.</div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results" id="results">
+      <div class="results-divider"></div>
+      <div class="results-header" id="t-results-header">Here's What's Happening</div>
+
+      <div class="bar-section">
+        <div class="bar-label-row">
+          <span id="bar-current-label">Current Score</span>
+          <span id="bar-target-label">Target Score</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-target-marker" id="bar-target"></div>
+          <div class="bar-fill" id="bar-current"></div>
+        </div>
+      </div>
+
+      <!-- SCHOLARSHIP HERO -->
+      <div class="scholarship-hero">
+        <div class="scholarship-hero-label" id="t-hero-label">Scholarship money on the table</div>
+        <div class="scholarship-hero-val" id="m-scholarship">$25,000</div>
+        <div class="scholarship-hero-sub" id="t-hero-sub">Bright Futures covers up to 100% of Florida tuition.</div>
+      </div>
+
+      <div class="metrics-grid metrics-3">
+        <div class="metric">
+          <div class="metric-val gold" id="m-gap">—</div>
+          <div class="metric-lbl" id="t-m-gap">Points Needed</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val" id="m-questions">—</div>
+          <div class="metric-lbl" id="t-m-questions">Extra Correct Answers</div>
+        </div>
+        <div class="metric">
+          <div class="metric-val" id="m-scholarship-mini">—</div>
+          <div class="metric-lbl" id="t-m-scholarship-mini">Scholarship at Stake</div>
+        </div>
+      </div>
+
+      <div class="ai-response" id="ai-response">
+        <span class="ai-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>
+          Personalized for you
+        </span>
+        <div id="ai-content"></div>
+      </div>
+
+      <!-- PEAK-DESIRE CTA (right after the breakdown) -->
+      <a href="https://calendly.com/mezascholars2025/freeconsult" target="_blank" class="cta-link cta-link-full" id="t-cta-btn-top">Book My Free 15-Min Call with Sebastian →</a>
+      <div class="cta-microcopy" id="t-cta-micro-top">No pitch. Just straight answers about your child and the process.</div>
+
+      <!-- PROOF STRIP -->
+      <div class="proof-section">
+        <div class="proof-header" id="t-proof-header">Families already on the other side of this</div>
+
+        <div class="proof-card">
+          <div class="proof-stars">★★★★★</div>
+          <p class="proof-quote" id="t-proof-q1">"Before tutoring, I wasn't sure I could get the score I needed for Bright Futures. We went deep on the topics I struggled with most instead of rushing. I improved from 1110 to 1240 — 50 points above the threshold I needed."</p>
+          <div class="proof-meta"><span class="proof-name" id="t-proof-n1">Student</span><span class="proof-detail" id="t-proof-d1">1110 → 1240 · +140 points · South Florida</span></div>
+        </div>
+
+        <div class="proof-card">
+          <div class="proof-stars">★★★★★</div>
+          <p class="proof-quote" id="t-proof-q2">"Sebastian is a smart and kind tutor who cares about your success, not just finishing a lesson. He shares tricks that make learning easier and was determined to help me pass the SAT. I wouldn't have progressed without him."</p>
+          <div class="proof-meta"><span class="proof-name" id="t-proof-n2">Samantha H.</span><span class="proof-detail" id="t-proof-d2">SAT Student · South Florida</span></div>
+        </div>
+
+        <div class="proof-card">
+          <div class="proof-stars">★★★★★</div>
+          <p class="proof-quote" id="t-proof-q3">"Sebastian has been an amazing math tutor for my daughter — patient, professional, and easy to understand. He makes sure she fully understands each lesson and has built her confidence. We've seen a big improvement thanks to his dedication."</p>
+          <div class="proof-meta"><span class="proof-name" id="t-proof-n3">Betty R.</span><span class="proof-detail" id="t-proof-d3">Parent · South Florida</span></div>
+        </div>
+      </div>
+
+      <div class="date-banner" id="date-banner">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>
+        <span id="t-date-banner">Next SAT: <strong>—</strong> · Most students need 8–12 weeks of preparation to reach their full potential score.</span>
+      </div>
+
+      <!-- STACKED OFFER -->
+      <div class="cta-box">
+        <div class="offer-title" id="t-offer-title">On your free 15-minute call, you'll walk away knowing:</div>
+        <ul class="offer-stack" id="offer-stack">
+          <li id="t-stack-1"><span class="check">✓</span> The exact reason your child's score is stuck — not "study more," the real reason</li>
+          <li id="t-stack-2"><span class="check">✓</span> Which 2–3 question types are bleeding the most points right now</li>
+          <li id="t-stack-3"><span class="check">✓</span> Whether your scholarship target is realistic in your timeline — honestly</li>
+          <li id="t-stack-4"><span class="check">✓</span> Your simple first move this week, in plain language (Spanish or English)</li>
+        </ul>
+        <a href="https://calendly.com/mezascholars2025/freeconsult" target="_blank" class="cta-link" id="t-cta-btn">Book My Free 15-Min Call →</a>
+        <div class="price-anchor" id="t-price-anchor">Private SAT tutors charge $2,000+. This call is free.</div>
+        <div class="cta-microcopy light" id="t-cta-micro">No pitch. No pressure. I'll answer your questions about the SAT and the process — that's it.</div>
+        <div class="signature">
+          <strong>Sebastian Meza</strong>
+          <span id="t-signature">UCF Industrial Engineering · SAT 1490 · $30,000 Provost Scholar<br>Helping South Florida families ease the cost of college through Bright Futures.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// REPLACE THIS with your Vercel function URL after deploying
+const API_ENDPOINT = 'https://backend-omega-sepia-99.vercel.app/api/generate-plan';
+const FORMSPREE_ID = 'xaqakqlr';
+
+// Official College Board SAT dates (confirmed through mid-2027).
+// The page auto-selects the nearest date that is still more than 30 days away.
+// To extend: just add new ISO dates to this list as College Board publishes them.
+const SAT_DATES = [
+  '2026-06-06',
+  '2026-08-22',
+  '2026-09-12',
+  '2026-10-03',
+  '2026-11-07',
+  '2026-12-05',
+  '2027-03-06',
+  '2027-05-01',
+  '2027-06-05'
+];
+
+// Returns the next SAT date that is at least `minDays` away (default 30).
+function getNextSatDate(minDays = 60) {
+  const now = new Date();
+  const cutoff = new Date(now.getTime() + minDays * 24 * 60 * 60 * 1000);
+  for (const d of SAT_DATES) {
+    const dt = new Date(d + 'T00:00:00');
+    if (dt >= cutoff) return dt;
+  }
+  return null; // all known dates passed — update SAT_DATES list
+}
+
+function formatSatDate(dt, l) {
+  if (!dt) return l === 'es' ? 'próxima fecha' : 'next date';
+  const months = {
+    en: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+    es: ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']
+  };
+  return months[l][dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
+}
+
+const copy = {
+  en: {
+    headline: "No One Explained How Bright Futures Works. Until Now.",
+    subline: "In 60 seconds: how much scholarship money is on the line.",
+    trustStat1: "+160 pt average improvement",
+    trustStat2: "100% reach Bright Futures",
+    trustSub: "Trusted by South Florida families · 7 five-star reviews",
+    coachLabel: "Your coach",
+    dateBannerPre: "Next SAT: ",
+    dateBannerPost: " · Most students need 8–12 weeks of preparation to reach their full potential score.",
+    priceAnchor: "Private SAT tutors charge $2,000+. This call is free.",
+    current: "Current SAT Score",
+    targetLabel: "Scholarship Target",
+    emailLabel: "Email Address",
+    privacy: "No spam. Your score breakdown + next steps.",
+    btn: "Show Me the Gap →",
+    loadingText: "Analyzing the gap...",
+    loadingSub: "~10 seconds.",
+    resultsHeader: "Here's the Gap",
+    barCurrentLabel: "Current Score",
+    barTargetLabel: "Target Score",
+    heroLabel: "Scholarship money on the table",
+    heroSub: "Bright Futures covers up to 100% of Florida tuition.",
+    mGap: "Points Needed",
+    mQuestions: "Extra Correct Answers",
+    mScholarshipMini: "Scholarship at Stake",
+    ctaBtnTop: "Book My Free 15-Min Call →",
+    ctaMicroTop: "No pitch. Just answers.",
+    proofHeader: "Families already on the other side of this",
+    proofQ1: "\"Before tutoring, I wasn't sure I could get the score I needed for Bright Futures. We went deep on the topics I struggled with most instead of rushing. I improved from 1110 to 1240 — 50 points above the threshold I needed.\"",
+    proofN1: "Student", proofD1: "1110 → 1240 · +140 points · South Florida",
+    proofQ2: "\"Sebastian is a smart and kind tutor who cares about your success, not just finishing a lesson. He shares tricks that make learning easier and was determined to help me pass the SAT. I wouldn't have progressed without him.\"",
+    proofN2: "Samantha H.", proofD2: "SAT Student · South Florida",
+    proofQ3: "\"Sebastian has been an amazing math tutor for my daughter — patient, professional, and easy to understand. He makes sure she fully understands each lesson and has built her confidence. We've seen a big improvement thanks to his dedication.\"",
+    proofN3: "Betty R.", proofD3: "Parent · South Florida",
+    offerTitle: "On your free 15-minute call, you'll walk away knowing:",
+    stack1: "The exact reason the score is stuck — the real reason",
+    stack2: "Which 2–3 question types are costing the most points",
+    stack3: "Whether your target is realistic in your timeline — honestly",
+    stack4: "Your first move this week (Spanish or English)",
+    ctaBtn: "Book My Free 15-Min Call →",
+    ctaMicro: "No pitch. No pressure. Just answers.",
+    signature: "UCF Industrial Engineering · SAT 1490 · $30,000 Provost Scholar<br>Helping South Florida families ease the cost of college through Bright Futures.",
+    medallion: "Florida Medallion (1190)",
+    academic: "Florida Academic (1330)",
+    fallback: "<h3>The score you need</h3><p>You're short by a specific number of points — and it's not spread across the whole test. At this level, most of the gap sits in just 2–3 question types.</p><h3>How achievable it is</h3><p>This is a very reachable gap with focused, expert coaching — students at this range typically close it in a few weeks once they stop drilling everything and start fixing the right things. The bottleneck isn't effort. It's targeting.</p><h3>Your next step</h3><p>Book a free 15-minute call. Sebastian will tell you exactly which areas to fix first and whether your timeline is realistic.</p>",
+    alerts: { score: "Please enter a valid SAT score (400–1600).", email: "Please enter a valid email address." }
+  },
+  es: {
+    headline: "Tu hijo/a es inteligente — pero nadie te explicó cómo funciona el SAT ni Bright Futures. Hasta ahora.",
+    subline: "En 60 segundos: cuánto dinero de beca está en juego para tu hijo/a.",
+    trustStat1: "+160 pts de mejora promedio",
+    trustStat2: "100% alcanzan Bright Futures",
+    trustSub: "La confianza de familias del Sur de Florida · 7 reseñas de 5 estrellas",
+    coachLabel: "Tu coach",
+    dateBannerPre: "Próximo SAT: ",
+    dateBannerPost: " · La mayoría de los estudiantes necesita 8–12 semanas de preparación para alcanzar su máximo puntaje.",
+    priceAnchor: "Los tutores privados de SAT cobran $2,000+. Esta llamada es gratis.",
+    current: "Puntaje SAT Actual",
+    targetLabel: "Meta de Beca",
+    emailLabel: "Correo Electrónico",
+    privacy: "Sin spam. Tu análisis de puntaje + próximos pasos.",
+    btn: "Ver la Brecha →",
+    loadingText: "Analizando la brecha...",
+    loadingSub: "~10 segundos.",
+    resultsHeader: "Esta Es la Brecha",
+    barCurrentLabel: "Puntaje Actual",
+    barTargetLabel: "Puntaje Objetivo",
+    heroLabel: "Dinero de beca en juego",
+    heroSub: "Bright Futures cubre hasta el 100% de la matrícula en Florida.",
+    mGap: "Puntos Necesarios",
+    mQuestions: "Respuestas Extra Correctas",
+    mScholarshipMini: "Beca en Juego",
+    ctaBtnTop: "Reservar Mi Llamada Gratis de 15 Min →",
+    ctaMicroTop: "Sin venta. Solo respuestas.",
+    proofHeader: "Familias que ya están del otro lado de esto",
+    proofQ1: "\"Antes de las tutorías, no estaba segura de poder alcanzar el puntaje que necesitaba para Bright Futures. Profundizamos en los temas que más me costaban en vez de apurarnos. Subí de 1110 a 1240 — 50 puntos por encima del umbral que necesitaba.\"",
+    proofN1: "Estudiante", proofD1: "1110 → 1240 · +140 puntos · Sur de Florida",
+    proofQ2: "\"Sebastian es un tutor inteligente y amable al que le importa tu éxito, no solo terminar la lección. Comparte trucos que facilitan el aprendizaje y estaba decidido a ayudarme a pasar el SAT. No habría progresado sin él.\"",
+    proofN2: "Samantha H.", proofD2: "Estudiante de SAT · Sur de Florida",
+    proofQ3: "\"Sebastian ha sido un tutor de matemáticas increíble para mi hija — paciente, profesional y fácil de entender. Se asegura de que entienda cada lección y le ha dado confianza. Hemos visto una gran mejora gracias a su dedicación.\"",
+    proofN3: "Betty R.", proofD3: "Madre de familia · Sur de Florida",
+    offerTitle: "En tu llamada gratis de 15 minutos, te irás sabiendo:",
+    stack1: "La razón exacta por la que el puntaje está estancado — la razón real",
+    stack2: "Qué 2–3 tipos de preguntas le están costando más puntos",
+    stack3: "Si tu meta es realista en tu tiempo disponible — con honestidad",
+    stack4: "Tu primer paso esta semana (español o inglés)",
+    ctaBtn: "Reservar Mi Llamada Gratis de 15 Min →",
+    ctaMicro: "Sin venta. Sin presión. Solo respuestas.",
+    signature: "Ingeniería Industrial UCF · SAT 1490 · Beca Provost de $30,000<br>Ayudando a familias del Sur de Florida a reducir el costo de la universidad con Bright Futures.",
+    medallion: "Medallón de Florida (1190)",
+    academic: "Académica de Florida (1330)",
+    fallback: "<h3>El puntaje que necesitas</h3><p>Te faltan un número específico de puntos — y no están repartidos por todo el examen. En este nivel, la mayor parte de la brecha está en solo 2–3 tipos de preguntas.</p><h3>Qué tan alcanzable es</h3><p>Es una brecha muy alcanzable con coaching experto y enfocado — los estudiantes en este rango suelen cerrarla en pocas semanas una vez que dejan de practicar todo y empiezan a corregir lo correcto. El obstáculo no es el esfuerzo. Es la dirección.</p><h3>Tu siguiente paso</h3><p>Reserva una llamada gratis de 15 minutos. Sebastian te dirá exactamente qué áreas corregir primero y si tu tiempo es realista.</p>",
+    alerts: { score: "Por favor ingresa un puntaje SAT válido (400–1600).", email: "Por favor ingresa un correo electrónico válido." }
+  }
+};
+
+let lang = 'es';
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('.top-lang-toggle .lang-btn').forEach(b => b.classList.toggle('active', b.textContent === l.toUpperCase()));
+  const c = copy[l];
+  document.getElementById('t-headline').textContent = c.headline;
+  document.getElementById('t-subline').textContent = c.subline;
+  document.getElementById('t-trust-stat1').textContent = c.trustStat1;
+  document.getElementById('t-trust-stat2').textContent = c.trustStat2;
+  document.getElementById('t-trust-sub').textContent = c.trustSub;
+  document.getElementById('t-coach-label').textContent = c.coachLabel;
+  document.getElementById('t-price-anchor').textContent = c.priceAnchor;
+  // Auto-select nearest SAT date >60 days out (enforces 2-month prep minimum)
+  const nextDate = getNextSatDate(60);
+  document.getElementById('t-date-banner').innerHTML = c.dateBannerPre + '<strong>' + formatSatDate(nextDate, l) + '</strong>' + c.dateBannerPost;
+  document.getElementById('t-current').textContent = c.current;
+  document.getElementById('t-target-label').textContent = c.targetLabel;
+  document.getElementById('t-email-label').textContent = c.emailLabel;
+  document.querySelector('#t-privacy span').textContent = c.privacy;
+  document.getElementById('btn-text').textContent = c.btn;
+  document.getElementById('t-loading-text').textContent = c.loadingText;
+  document.getElementById('t-loading-sub').textContent = c.loadingSub;
+  document.getElementById('t-results-header').textContent = c.resultsHeader;
+  document.getElementById('bar-current-label').textContent = c.barCurrentLabel;
+  document.getElementById('bar-target-label').textContent = c.barTargetLabel;
+  document.getElementById('t-hero-label').textContent = c.heroLabel;
+  document.getElementById('t-hero-sub').textContent = c.heroSub;
+  document.getElementById('t-m-gap').textContent = c.mGap;
+  document.getElementById('t-m-questions').textContent = c.mQuestions;
+  document.getElementById('t-m-scholarship-mini').textContent = c.mScholarshipMini;
+  document.getElementById('t-cta-btn-top').textContent = c.ctaBtnTop;
+  document.getElementById('t-cta-micro-top').textContent = c.ctaMicroTop;
+  document.getElementById('t-proof-header').textContent = c.proofHeader;
+  document.getElementById('t-proof-q1').textContent = c.proofQ1;
+  document.getElementById('t-proof-n1').textContent = c.proofN1;
+  document.getElementById('t-proof-d1').textContent = c.proofD1;
+  document.getElementById('t-proof-q2').textContent = c.proofQ2;
+  document.getElementById('t-proof-n2').textContent = c.proofN2;
+  document.getElementById('t-proof-d2').textContent = c.proofD2;
+  document.getElementById('t-proof-q3').textContent = c.proofQ3;
+  document.getElementById('t-proof-n3').textContent = c.proofN3;
+  document.getElementById('t-proof-d3').textContent = c.proofD3;
+  document.getElementById('t-offer-title').textContent = c.offerTitle;
+  document.getElementById('t-stack-1').innerHTML = '<span class="check">✓</span> ' + c.stack1;
+  document.getElementById('t-stack-2').innerHTML = '<span class="check">✓</span> ' + c.stack2;
+  document.getElementById('t-stack-3').innerHTML = '<span class="check">✓</span> ' + c.stack3;
+  document.getElementById('t-stack-4').innerHTML = '<span class="check">✓</span> ' + c.stack4;
+  document.getElementById('t-cta-btn').textContent = c.ctaBtn;
+  document.getElementById('t-cta-micro').textContent = c.ctaMicro;
+  document.getElementById('t-signature').innerHTML = c.signature;
+  const sel = document.getElementById('target-select');
+  sel.options[0].text = c.medallion;
+  sel.options[1].text = c.academic;
+}
+
+async function handleSubmit() {
+  const cur = parseInt(document.getElementById('current-score').value);
+  const email = document.getElementById('parent-email').value.trim();
+  const a = copy[lang].alerts;
+
+  if (!cur || cur < 400 || cur > 1600) { alert(a.score); return; }
+  if (!email || !email.includes('@')) { alert(a.email); return; }
+
+  const target = parseInt(document.getElementById('target-select').value);
+  const gap = Math.max(0, target - cur);
+  const scholarship = target === 1330 ? '$25,000' : '$18,000';
+  const questions = Math.round(gap / 12.5);
+
+  const btn = document.getElementById('calc-btn');
+  const loading = document.getElementById('loading-state');
+  btn.disabled = true;
+  btn.style.display = 'none';
+  loading.classList.add('visible');
+
+  fbq('track', 'Lead');
+  // Send lead to Formspree (don't await — fire and forget)
+  fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      email: email,
+      current_score: cur,
+      target_score: target,
+      points_needed: gap,
+      extra_questions_needed: questions,
+      scholarship_value: scholarship,
+      language: lang === 'en' ? 'English' : 'Spanish',
+      _replyto: email,
+      _subject: `🎓 New Lead: Score ${cur} → ${target} | Meza Scholars`
+    })
+  }).catch(() => {});
+
+  // Send to Make webhook → Mailchimp
+  fetch('https://hook.us2.make.com/1nh6al14b2yammjk3olkwpmc961q0ro3', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: email,
+      current_score: cur,
+      target_score: target,
+      points_needed: gap,
+      scholarship_value: scholarship,
+      language: lang === 'en' ? 'English' : 'Spanish'
+    })
+  }).catch(() => {});
+
+  // Get AI-personalized response
+  let aiContent = copy[lang].fallback;
+  try {
+    const res = await fetch(API_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        currentScore: cur,
+        targetScore: target,
+        scholarship: scholarship,
+        language: lang
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.html) aiContent = data.html;
+    }
+  } catch (e) {
+    console.log('Using fallback content');
+  }
+
+  // Render results
+  const curPct = Math.round(((cur - 400) / 1200) * 100);
+  const tgtPct = Math.round(((target - 400) / 1200) * 100);
+  document.getElementById('bar-current').style.width = curPct + '%';
+  document.getElementById('bar-target').style.width = tgtPct + '%';
+  document.getElementById('m-gap').textContent = gap > 0 ? '+' + gap : '✓ Goal';
+  document.getElementById('m-questions').textContent = '~' + questions;
+  document.getElementById('m-scholarship-mini').textContent = scholarship;
+  document.getElementById('m-scholarship').textContent = scholarship;
+  document.getElementById('ai-content').innerHTML = aiContent;
+
+  loading.classList.remove('visible');
+  document.getElementById('results').classList.add('visible');
+  setTimeout(() => document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+// Apply Spanish translations on page load
+setLang('es');
+</script>
+</body>
+</html>
